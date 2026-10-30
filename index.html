@@ -79,7 +79,10 @@ button{cursor:pointer}
 .seg button.on{background:var(--fg);color:var(--ink);border-color:var(--fg)}
 .seg button:disabled{cursor:not-allowed;opacity:.45}
 .seg.icons button{padding:7px 11px;display:inline-flex;align-items:center}
+#aidSeg button{color:var(--muted)}
+#aidSeg button.on{background:transparent;border-color:transparent;color:var(--fg)}
 .ctrls{display:flex;gap:10px;align-items:center}
+#themeSeg + #aidSeg{margin-left:-4px}
 .seg button:focus-visible,.btn:focus-visible,.link:focus-visible,input:focus-visible{outline:2px solid var(--fg);outline-offset:3px}
 
 /* board */
@@ -91,12 +94,8 @@ button{cursor:pointer}
 .swatch .pill{max-width:min(100%,520px)}
 .swatch .pill .t{font-size:15px;font-weight:600;line-height:1.35}
 /* the player's own color, kept in view as a reference against the target */
-/* the swatch touches the target directly (no outline, no box); the label is a tab hanging off its right edge */
-.ref{position:absolute;top:18px;right:18px;display:flex;align-items:stretch}
-.ref .sq{width:56px;height:56px;border-radius:12px 0 0 12px;background:var(--pc,#808080);flex:0 0 auto}
-.ref .t{display:flex;flex-direction:column;justify-content:center;gap:2px;padding:8px 12px 8px 12px;border-radius:0 12px 12px 0;background:rgba(18,19,22,.9);color:#F0F0F2}
-.ref .t .lbl{color:#A5A7AE;font-size:10px}
-.ref .t .m{font-family:var(--mono);font-size:12px;color:#F0F0F2;font-variant-numeric:tabular-nums}
+/* the player's swatch touches the target directly: no outline, no box, no label */
+.ref{position:absolute;top:18px;right:18px;width:56px;height:56px;border-radius:12px;background:var(--pc,#808080)}
 .split{flex:1;min-height:0;border-radius:22px;overflow:hidden;display:flex}
 .half{flex:1;min-width:0;display:flex;align-items:flex-end;padding:18px}
 .half.r{justify-content:flex-end}
@@ -226,19 +225,24 @@ p{margin:0}
   .brand{order:1}
   .brand .wordmark{font-size:20px}
   #modeSeg{order:2}
-  .stats{order:3;flex:1 1 60%;justify-content:space-between;flex-wrap:nowrap;gap:8px;min-width:0}
+  .stats{order:3;flex:1 1 50%;justify-content:space-between;flex-wrap:nowrap;gap:6px;min-width:0}
   #themeSeg{order:4}
+  #aidSeg{order:5}
+  #themeSeg + #aidSeg{margin-left:-6px}
   .player{display:none!important}
   .stat{gap:1px}
-  .val{font-size:18px}
-  .lbl{font-size:10px;letter-spacing:.12em}
-  .lives{gap:6px;height:22px}
-  .life{width:15px;height:15px;border-radius:4px}
-  .stat.time{min-width:50px}
+  .val{font-size:17px}
+  .lbl{font-size:9.5px;letter-spacing:.1em}
+  .lives{gap:5px;height:22px}
+  .life{width:14px;height:14px;border-radius:4px}
+  .stat.time{min-width:44px}
+  .tbar{display:none}                    /* the digits carry it on a phone */
   .seg{padding:3px;gap:2px}
   .seg button{min-height:36px;padding:6px 9px;font-size:12px}
-  .seg.icons button{padding:6px 9px}
-  .seg.icons button.on{display:none}     /* one-tap toggle: only the other surround is offered */
+  .seg.icons{padding:2px}
+  .seg.icons button{min-height:34px;padding:5px 7px}
+  .seg.icons svg{width:17px;height:17px}
+  #themeSeg button.on{display:none}      /* one-tap toggle: only the other surround is offered */
   /* board */
   .board{flex-direction:column;flex-wrap:nowrap;gap:6px}
   .left{flex:1 0 100px;min-height:100px;gap:5px}
@@ -271,11 +275,7 @@ p{margin:0}
   .range{--tq:5px}
   .trk .tag{width:5px;height:15px;margin:-7.5px 0 0 -2.5px}
   .htag{width:5px;height:11px;margin:-5.5px 0 0 -2.5px;transform:rotate(var(--ph,0deg)) translateY(calc(var(--ring) * -.5 - 7px))}
-  .ref{top:10px;right:10px}
-  .ref .sq{width:40px;height:40px;border-radius:9px 0 0 9px}
-  .ref .t{padding:6px 9px;border-radius:0 9px 9px 0}
-  .ref .t .lbl{display:none}
-  .ref .t .m{font-size:10.5px}
+  .ref{top:10px;right:10px;width:40px;height:40px;border-radius:9px}
   .range::-moz-range-thumb{width:16px;height:16px;border-width:3px}
   .aids{font-size:11px;margin-top:-3px}
   .strip{flex:0 0 auto;min-height:44px;padding:6px 8px;border-radius:12px}
@@ -333,6 +333,12 @@ p{margin:0}
         <button type="button" id="themeNight" class="on" aria-label="Night: judge colors against a dark surround" title="Night surround"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button>
         <button type="button" id="themeDay" aria-label="Day: judge colors against a light surround" title="Day surround"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg></button>
       </div>
+      <div class="seg icons" id="aidSeg">
+        <button type="button" id="aidBtn" aria-pressed="true" aria-label="Show my color as a reference on the target and the dials" title="My color as a reference: on">
+          <svg id="eyeOpen" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          <svg id="eyeShut" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" hidden><path d="M3 13c2.5 3 5.5 4.5 9 4.5s6.5-1.5 9-4.5M5 15.5l-1.5 2M9.5 17.3l-.6 2.4M14.5 17.3l.6 2.4M19 15.5l1.5 2"></path></svg>
+        </button>
+      </div>
       <div class="seg" id="modeSeg" role="group" aria-label="Mode">
         <button type="button" id="modePractice" title="Live preview, nothing scored">Practice</button>
         <button type="button" id="modeNormal" class="on" title="No preview, three lives">Normal</button>
@@ -345,7 +351,7 @@ p{margin:0}
     <div class="left">
       <div class="cap"><div class="lbl" id="leftLbl">Your color</div><div class="note" id="leftNote">Mix a shade you like. The lives in the header take it.</div></div>
       <div class="swatch" id="swatch">
-        <div class="ref" id="ref" hidden><div class="sq"></div><div class="t"><div class="lbl">Your color</div><div class="m" id="refVals"></div></div></div>
+        <div class="ref" id="ref" hidden role="img" aria-label="Your color, for comparison"></div>
         <div class="pill" id="modePill"><div class="lbl">Mode</div><div class="t" id="modePillText"></div></div>
       </div>
       <div class="split" id="split" hidden>
@@ -521,7 +527,9 @@ p{margin:0}
   try{ const saved=JSON.parse(localStorage.getItem('shade.player')||'null');
        if(saved&&saved.pc){ S.name=saved.name||''; S.pc=saved.pc; S.k={...saved.pc};
          S.mode = (saved.mode==='practice'||saved.mode==='easy') ? 'practice' : (saved.mode==='expert' ? 'expert' : 'normal'); }
-       const th=localStorage.getItem('shade.theme'); if(th==='day'||th==='night') S.theme=th; }catch(e){}
+       const th=localStorage.getItem('shade.theme'); if(th==='day'||th==='night') S.theme=th;
+       S.aid = localStorage.getItem('shade.aid') !== 'off'; }catch(e){}
+  if(S.aid===undefined) S.aid=true;
   const practice = () => S.mode==='practice';
   const expert = () => S.mode==='expert';
   const MODE_INTRO = { practice:'Practice Mode: rounds are not scored, preview shown', normal:'Normal Mode: lose a life if score is below 80', expert:'Expert Mode: lose a life if score is below 80, timer on' };
@@ -601,11 +609,16 @@ p{margin:0}
   }
   function setPlayerColor(c){ el.app.style.setProperty('--pc', css(c)); }
   /* the player's color as a reference: a window in the target field, and a tag on each dial */
+  function renderAidBtn(){
+    const on = !!S.aid;
+    $('eyeOpen').toggleAttribute('hidden', !on); $('eyeShut').toggleAttribute('hidden', on);   // SVG has no .hidden property
+    const b=$('aidBtn'); b.setAttribute('aria-pressed', on?'true':'false'); b.classList.toggle('on', on);
+    b.title = on ? 'My color as a reference: on' : 'My color as a reference: off';
+  }
   function renderTags(){
-    const play = S.screen==='play', pc=S.pc;
+    const play = S.screen==='play' && !!S.aid, pc=S.pc;
     $('ref').hidden = !play; $('hueTag').hidden = !play; $('satTag').hidden = !play; $('ligTag').hidden = !play;
     if(!play) return;
-    $('refVals').textContent = `H ${Math.round(pc.h)}° · S ${Math.round(pc.s)}% · L ${Math.round(pc.l)}%`;
     $('hueTag').style.setProperty('--ph', pc.h+'deg');
     const pct = v => ((v-9)/(91-9)*100)+'%';
     $('satTag').style.left = pct(pc.s);
@@ -763,6 +776,7 @@ p{margin:0}
   el.modeExpert.addEventListener('click',()=>setMode('expert'));
   el.themeNight.addEventListener('click',()=>{ S.theme='night'; applyTheme(); });
   el.themeDay.addEventListener('click',()=>{ S.theme='day'; applyTheme(); });
+  $('aidBtn').addEventListener('click',()=>{ S.aid=!S.aid; renderAidBtn(); renderTags(); try{ localStorage.setItem('shade.aid', S.aid?'on':'off'); }catch(e){} });
   el.mainBtn.addEventListener('click',()=>{
     if(S.screen==='warm'){ S.pc={...S.k}; S.name=el.nameIn.value.trim(); setPlayerColor(S.pc); persist(); startRun(); }
     else if(S.screen==='play'){ submit(false); }
@@ -855,7 +869,7 @@ p{margin:0}
 
   /* ---------- boot ---------- */
   function start(data){
-    applyTheme();
+    applyTheme(); renderAidBtn();
     if(data && data.S){ Object.assign(S, data.S); setPlayerColor(S.pc); applyTheme();
       if(S.screen==='reveal' && S.last){ renderReveal(false); }
       else if(S.screen==='over'){ gameOver(); }
